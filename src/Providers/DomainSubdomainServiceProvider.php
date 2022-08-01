@@ -7,6 +7,7 @@ use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Jmrashed\DomainSubdomain\Calculator;
+use Jmrashed\DomainSubdomain\Http\Middleware\DomainCheck;
 use Jmrashed\DomainSubdomain\Console\{InstallDomainSubdomainPackage, MakeFooCommand};
 
 class DomainSubdomainServiceProvider extends ServiceProvider
