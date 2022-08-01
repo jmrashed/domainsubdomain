@@ -1,7 +1,69 @@
 ## Domain Subdomain
 
-[]: # Language: markdown
-[]: # Path: packages\domain\readme.md
+# Directory Structure
+
+General directory structure of a generic package, you’ll notice how it looks quite different from a standard Laravel project.
+
+```bash
+    - src
+    - tests
+    CHANGELOG.md
+    README.md
+    LICENSE
+    composer.json
+```
+
+# Composer.json
+
+Let's start by creating a `composer.json` file in the root of your package directory, having a minimal configuration (as shown below).
+An example composer.json is highlighted below.
+
+```json
+{
+    "name": "jmrashed/domainsubdomain",
+    "description": "This package will manage domain and  subdomain. You can add, edit, delete, and view domain and subdomain.",
+    "keywords": ["package", "laravel"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Md Rasheduzzaman",
+            "email": "jmrashed@gmail.com",
+            "homepage": "",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "laravel/framework": "^8.0",
+        "illuminate/support": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jmrashed\\DomainSubdomain\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jmrashed\\DomainSubdomai\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jmrashed\\DomainSubdomain\\DomainSubdomainServiceProvider"
+            ],
+            "aliases": {
+                "Calculator": "Jmrashed\\DomainSubdomain\\Facades\\Calculator"
+            }
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "orchestra/testbench": "6.0"
+    }
+}
+```
 
 ## Installation command
 
