@@ -76,17 +76,12 @@ To use these components in our package, we'll require the Orchestra Testbench. N
 
 # Service Providers
 
-Every service provider extends the `Illuminate\Support\ServiceProvider` and implements a `register()` and a `boot()` method.
-
-Since we've pulled in Orchestra Testbench, we can extend the `Illuminate\Support\ServiceProvider` and create our service provider in the `src/` directory
-
-# Autoloading
+Every service provider extends the `Illuminate\Support\ServiceProvider` and implements a `register()` and a `boot()` method. We create `DomainSubdomainServiceProvider` service provider in the `src/` directory.
 
 To automatically register it with a Laravel project using Laravel's package auto-discovery we add our service provider to the "extra"> "laravel"> "providers" key in our package's composer.json:
 
 ```php{
     ..., // other keys
-    "autoload": { ... },
     "extra": {
         "laravel": {
             "providers": [
@@ -107,23 +102,20 @@ Important: this feature is available starting from Laravel 5.5. With version 5.4
     ],
 ```
 
-# Installing PHPUnit
+# Installing PHPUnit and Directory Structure
 
-There are many options to test behavior in PHP. However, we'll stay close to Laravel's defaults, which uses the excellent tool PHPUnit.
+There are many options to test behavior in PHP. However, we'll stay close to Laravel's defaults, which uses the excellent tool PHPUnit. For install PHPUnit as a dev-dependency in our package:
 
-Install PHPUnit as a dev-dependency in our package:
 `composer require --dev phpunit/phpunit`
-
-# Directory Structure
 
 To accommodate Feature and Unit tests, create a tests/ directory with a Unit and Feature subdirectory and a base TestCase.php file. The structure looks as follows:
 
-```json
+```bash
     tests/
     ├── Feature
-    │   └── ExampleTest.php
+    │   └── InstallPackageTest.php
     ├── Unit
-    │   └── ExampleTest.php
+    │   └── InstallPackageTest.php
     └── TestCase.php
 ```
 
@@ -141,36 +133,54 @@ Finally, re-render the autoload file by running `composer dump-autoload`.
 
 # Creating a Facade
 
-Let’s assume that we provide a Calculator class as part of our package and want to make this class available as a facade. we’ll create the facade in a new src/Facades folder.
-Finally, we register the binding in the service container in our service provider:
+Let’s assume that we provide a Calculator class as part of our package and want to make this class available as a facade. we’ll create the facade in a new `src/`Facades folder.
 
-```php
-    namespace Jmrashed\DomainSubdomain;
+-   Facade directory structure
 
-    public function register()
-    {
-        $this->app->bind('calculator', function($app) {
-            return new Calculator();
-        });
-    }
-```
+    ```bash
+        src/
+        ├── Calculator.php
+        └── Facades
+            └── Calculator.php
+    ```
 
-The end user can now use the Calculator facade after importing it from the appropriate namespace: use `Jmrashed\DomainSubdomain\Facades\Calculator`;. However, Laravel allows us to register an alias that can register a facade in the root namespace. We can define our alias under an “alias” key below the “providers” in the composer.json file:
+The Calculator facade after importing it from the appropriate namespace: use `Jmrashed\DomainSubdomain\Facades\Calculator`;
+However, Laravel allows us to register an alias that can register a facade in the root namespace. We can define our alias under an “alias” key below the “providers” in the composer.json file:
 
-```json
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Jmrashed\\DomainSubdomain\\DomainSubdomainServiceProvider"
-            ],
-            "aliases": {
-                "Calculator": "Jmrashed\\DomainSubdomain\\Facades\\Calculator"
+-   Facade Introduce into composer.json
+
+    ```json
+        "autoload": {
+            "psr-4": {
+                "Jmrashed\\DomainSubdomain\\": "src"
             }
-        }
-    }
-```
+        },
+        "autoload-dev": {
+            "psr-4": {
+                "Jmrashed\\DomainSubdomain\\Tests\\": "tests"
+            }
+        },
+        "extra": {
+            "laravel": {
+                "providers": [
+                    "Jmrashed\\DomainSubdomain\\DomainSubdomainServiceProvider"
+                ],
+                "aliases": {
+                    "Calculator": "Jmrashed\\DomainSubdomain\\Facades\\Calculator"
+                }
+            }
+        },
+    ```
 
-Important: this feature is available starting from Laravel 5.5. With version 5.4 or below, you must register your facades manually in the aliases section of the config/app.php configuration file.
+    -   Facade Introduce into config/app.php [ With version 5.4 or below]
+
+        ```php
+            <?php
+            'aliases' => [
+                // Other Aliases
+                'Calculator' => Jmrashed\DomainSubdomain\Facades\Calculator::class,
+            ],
+        ```
 
 You can also load an alias from a Service Provider (or anywhere else) by using the AliasLoader singleton class:
 
@@ -182,82 +192,73 @@ You can also load an alias from a Service Provider (or anywhere else) by using t
 
 Our facade now no longer requires an import and can be used in projects from the root namespace:
 
-```php
-    Calculator::add(1, 2);
+-   Example of Facade Usage
 
-    // Usage of the example Calculator facade
-    Calculator::add(5)->subtract(3)->getResult(); // 2
-
-```
-
-# Artisan Commands
-
-we want to provide an easy artisan command for our end user to publish the config file, via: `php artisan domainsubdomain:install`
-
-# Registering a Command in the Service Provider
-
-We need to present this package functionality to the end-user, thus registering it in the package's service provider.
-
-```php
-    namespace Jmrashed\DomainSubdomain;
-
-    use Illuminate\Support\ServiceProvider;
-    use Jmrashed\DomainSubdomain\Commands\InstallCommand;
-
-    class DomainSubdomainServiceProvider extends ServiceProvider
-    {
-        public function register()
+    ```php
+        <?php
+        namespace App\Http\Controllers;
+        use Illuminate\Http\Request;
+        use Calculator;
+        class DomainController extends Controller
         {
-            $this->app->bind('calculator', function($app) {
-                return new Calculator();
-            });
-        }
-
-        public function boot()
-        {
-            if ($this->app->runningInConsole()) {
-                $this->commands([
-                    InstallCommand::class,
-                ]);
+            public function add(Request $request)
+            {
+                $result = Calculator::add($request->input('a'), $request->input('b'));
+                Calculator::add(5)->subtract(3)->getResult(); // 2
+                return view('calculator.add', compact('result'));
             }
         }
-    }
-```
+    ```
+
+# Creating a Console Command
+
+we want to provide an easy artisan command for our end user to publish the config file, via: `php artisan domainsubdomain:install` .
+We need to present this package functionality to the end-user, thus registering it in the package's service provider.
+
+-   InstallCommand directory structure
+
+    ```bash
+        src/
+        ├── Commands
+        │   └── InstallCommand.php
+        └── DomainSubdomainServiceProvider.php
+    ```
 
 The config file can now be exported using the command listed below, creating a `domainsubdomain.php` file in the `/config` directory of the Laravel project using this package
 
-# publishing a Config File
+# Publishing
 
-`php artisan vendor:publish --provider="Jmrashed\DomainSubdomain\DomainSubdomainServiceProvider" --tag="config"`
+-   Config File
+    `php artisan vendor:publish --provider="Jmrashed\DomainSubdomain\DomainSubdomainServiceProvider" --tag="config"`
 
-# Publishing a Migration File
+-   Migration File
 
 `php artisan vendor:publish --provider="Jmrashed\DomainSubdomain\DomainSubdomainServiceProvider" --tag="migrations"`
 
-# Publishing a View File
+-   View File
 
 `php artisan vendor:publish --provider="Jmrashed\DomainSubdomain\DomainSubdomainServiceProvider" --tag="views"`
 
-# Publishing a Translation File
+-   Translation File
 
 `php artisan vendor:publish --provider="Jmrashed\DomainSubdomain\DomainSubdomainServiceProvider" --tag="translations"`
 
-# Publishing a Public File
+-   Public File
 
 `php artisan vendor:publish --provider="Jmrashed\DomainSubdomain\DomainSubdomainServiceProvider" --tag="public"`
 
-# Publishing a Resource File
+-   Resource File
 
 `php artisan vendor:publish --provider="Jmrashed\DomainSubdomain\DomainSubdomainServiceProvider" --tag="resources"`
 
-# Publishing a Route File
+-   Route File
 
 `php artisan vendor:publish --provider="Jmrashed\DomainSubdomain\DomainSubdomainServiceProvider" --tag="routes"`
 
-# Publishing a Seed File
+-   Seed File
 
 `php artisan vendor:publish --provider="Jmrashed\DomainSubdomain\DomainSubdomainServiceProvider" --tag="seeds"`
 
-# Publishing a assets
+-   assets
 
 `php artisan vendor:publish --provider="Jmrashed\DomainSubdomain\DomainSubdomainServiceProvider" --tag="assets"`
