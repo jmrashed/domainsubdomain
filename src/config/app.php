@@ -1,4 +1,6 @@
 <?php
+
+use Illuminate\Foundation\AliasLoader;
  
-$loader = \Illuminate\Foundation\AliasLoader::getInstance();
+$loader = AliasLoader::getInstance();
 $loader->alias('Calculator', "Jmrashed\\DomainSubdomain\\Facades\\Calculator");
