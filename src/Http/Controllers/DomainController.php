@@ -2,6 +2,7 @@
 
 namespace Jmrashed\DomainSubdomain\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Jmrashed\DomainSubdomain\Models\Domain;
 
 class DomainController extends Controller
@@ -19,12 +20,21 @@ class DomainController extends Controller
         return view('domainsubdomain::domains.index', compact('domains'));
     }
 
+    public function create()
+    {
+        dd('create');
+    }
+
     public function show()
     {
         //
     }
 
     public function store()
+    {
+    }
+
+    public function destroy()
     {
     }
 }
