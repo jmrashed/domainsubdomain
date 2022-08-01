@@ -229,7 +229,8 @@ The config file can now be exported using the command listed below, creating a `
 # Publishing
 
 -   Config File
-    `php artisan vendor:publish --provider="Jmrashed\DomainSubdomain\DomainSubdomainServiceProvider" --tag="config"`
+
+`php artisan vendor:publish --provider="Jmrashed\DomainSubdomain\DomainSubdomainServiceProvider" --tag="config"`
 
 -   Migration File
 
@@ -262,3 +263,7 @@ The config file can now be exported using the command listed below, creating a `
 -   assets
 
 `php artisan vendor:publish --provider="Jmrashed\DomainSubdomain\DomainSubdomainServiceProvider" --tag="assets"`
+
+## Artisan Commands
+
+`php artisan blogpackage:install`
