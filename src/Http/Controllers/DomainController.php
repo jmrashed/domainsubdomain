@@ -10,7 +10,7 @@ class DomainController extends Controller
 
     public function __construct()
     {
-        $this->middleware('domaincheck');
+        $this->middleware('domain');
     }
 
     public function index()
