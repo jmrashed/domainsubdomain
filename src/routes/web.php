@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use  Jmrashed\DomainSubdomain\Http\Controllers\DomainsController;
+use  Jmrashed\DomainSubdomain\Http\Controllers\DomainController;
 
-Route::get('/domains', [DomainsController::class, 'index']);
-Route::get('/domains/{domain}', [DomainsController::class, 'show']);
-Route::post('/domains', [DomainsController::class, 'store']);
+Route::get('/domains', [DomainController::class, 'index']);
+Route::get('/domains/{domain}', [DomainController::class, 'show']);
+Route::post('/domains', [DomainController::class, 'store']);

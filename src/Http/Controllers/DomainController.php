@@ -26,6 +26,5 @@ class DomainController extends Controller
 
     public function store()
     {
-        
     }
 }
