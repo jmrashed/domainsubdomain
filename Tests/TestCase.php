@@ -2,7 +2,7 @@
 
 namespace Jmrashed\DomainSubdomain\Tests;
 
-use Jmrashed\DomainSubdomain\DomainSubdomainServiceProvider;
+use Jmrashed\DomainSubdomain\Providers\DomainSubdomainServiceProvider;
 
 class TestCase extends TestCase
 {

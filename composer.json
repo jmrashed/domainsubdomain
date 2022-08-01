@@ -30,7 +30,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Jmrashed\\DomainSubdomain\\DomainSubdomainServiceProvider"
+        "Jmrashed\\DomainSubdomain\\Providers\\DomainSubdomainServiceProvider"
       ],
       "aliases": {
         "Calculator": "Jmrashed\\DomainSubdomain\\Facades\\Calculator"

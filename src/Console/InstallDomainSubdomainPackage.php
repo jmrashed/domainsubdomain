@@ -50,7 +50,7 @@ class InstallDomainSubdomainPackage extends Command
     private function publishConfiguration($forcePublish = false)
     {
         $params = [
-            '--provider' => "Jmrashed\DomainSubdomain\DomainSubdomainServiceProvider",
+            '--provider' => "Jmrashed\DomainSubdomain\Providers\DomainSubdomainServiceProvider",
             '--tag' => "config"
         ];
 
