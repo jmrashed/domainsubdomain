@@ -5,7 +5,7 @@ namespace Jmrashed\DomainSubdomain\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Jmrashed\DomainSubdomain\Models\Domain;
 
-class DomainController extends Controller
+class SubDomainController extends Controller
 {
 
 
@@ -21,42 +21,25 @@ class DomainController extends Controller
             // Create
             [
                 'text' => 'Create',
-                'url' => route('domains.create'),
+                'url' => route('subdomains.create'),
                 'class' => 'btn-primary',
             ],
             // Export
             [
                 'text' => 'Export',
-                'url' => route('domains.export', 1),
+                'url' => route('subdomains.export', 1),
                 'class' => 'btn-success',
             ],
 
             // Import
             [
                 'text' => 'Import',
-                'url' => route('domains.import',1),
+                'url' => route('subdomains.import',1),
                 'class' => 'btn-info',
             ],
 
         ];
-        return view('domainsubdomain::domains.index', compact('domains'));
+        return view('domainsubdomain::subdomains.index', compact('domains','buttons'));
     }
-
-    public function create()
-    {
-        dd('create');
-    }
-
-    public function show()
-    {
-        //
-    }
-
-    public function store()
-    {
-    }
-
-    public function destroy()
-    {
-    }
+ 
 }
