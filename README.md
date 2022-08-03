@@ -267,4 +267,4 @@ The config file can now be exported using the command listed below, creating a `
 
 ## Artisan Commands
 
-`php artisan blogpackage:install`
+`php artisan domainsubdomain:install`
